@@ -1,0 +1,3 @@
+packages:
+  ./godot-haskell-gdextension.cabal
+  ./packages/example/example.cabal

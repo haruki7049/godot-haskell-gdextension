@@ -8,7 +8,10 @@ license-file: LICENSE
 build-type: Custom
 
 custom-setup
-  setup-depends: base, Cabal, directory
+  setup-depends:
+    Cabal,
+    base,
+    directory,
 
 common warnings
   ghc-options: -Wall
