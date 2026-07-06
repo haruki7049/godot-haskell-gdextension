@@ -4,6 +4,9 @@ module GodotApi where
 
 #include "gdextension_interface.h"
 
+import Foreign.C.String (CString)
+import Foreign.C.Types (CUChar)
+
 --
 -- All Enums
 --
@@ -32,7 +35,30 @@ data GodotVersion = GodotVersion {
 }
 
 --
--- All Function types
+-- All pointers
 --
 
--- {# typedef InitializationFunction )(GDExtensionInterfaceGetProcAddress p_get_proc_address, GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization);
+{# pointer GDExtensionInterfaceFunctionPtr as FunPtr #}
+
+--
+-- All Function pointer types
+--
+
+{# pointer GDExtensionInterfaceGetProcAddress as GetProcAddressFunPtr #}
+{# pointer GDExtensionClassLibraryPtr as ClassLibraryPtr #}
+{# pointer *InitializationFunction as InitializationPtr -> FunPtr #}
+
+foreign import ccall "dynamic"
+  callGetProcAddress :: GetProcAddressFunPtr -> (CString -> IO (FunPtr))
+
+foreign export ccall "my_extension_init"
+  myExtensionInit
+    :: GetProcAddressFunPtr
+    -> ClassLibraryPtr
+    -> InitializationPtr
+    -> IO CUChar
+
+myExtensionInit :: GetProcAddressFunPtr -> ClassLibraryPtr -> InitializationPtr -> IO CUChar
+myExtensionInit getProcAddress library initialization = do
+  -- initialize your extension here
+  return 1
