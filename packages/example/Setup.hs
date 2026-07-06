@@ -11,7 +11,7 @@ main =
     simpleUserHooks
       { postBuild = \_ _ _ lbi -> do
           -- Define the destination directory
-          let outDir = ".." </> ".." </> "example" </> "godot" </> "bin"
+          let outDir = "out"
           createDirectoryIfMissing True outDir
 
           -- Define source and destination file paths
