@@ -5,7 +5,10 @@ synopsis: Haskell bindings for the Godot game engine API
 description: This package contains Haskell bindings for GDExtension and the Godot API. For details and examples, see README.md
 license: Apache-2.0
 license-file: LICENSE
-build-type: Simple
+build-type: Custom
+
+custom-setup
+  setup-depends: base, Cabal, directory
 
 common warnings
   ghc-options: -Wall
