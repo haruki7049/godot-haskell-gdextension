@@ -10,6 +10,7 @@ import Distribution.Simple.Utils
     die',
     rawSystemExit,
   )
+import Distribution.Types.LocalBuildInfo (buildDir)
 import Distribution.Types.PackageDescription (PackageDescription)
 import Distribution.Verbosity (normal)
 import System.Directory (withCurrentDirectory)
@@ -28,12 +29,9 @@ myBuildHook pkgDescr lbi hooks flags = do
     Just (p, _) -> return p
     Nothing -> die' normal "godot4 not found on PATH"
 
-  withLibLBI pkgDescr lbi $ \_lib clbi -> do
-    let genDir = autogenComponentModulesDir lbi clbi
-    createDirectoryIfMissingVerbose normal True genDir
-    -- The tool dumps the header into the current directory,
-    -- so run it with cwd set to genDir
-    withCurrentDirectory genDir $
-      rawSystemExit normal toolPath ["--dump-gdextension-interface", "--quiet", "--no-header"]
+  let genDir = buildDir lbi
+  createDirectoryIfMissingVerbose normal True genDir
+  withCurrentDirectory genDir $
+    rawSystemExit normal toolPath ["--dump-gdextension-interface", "--quiet", "--no-header"]
 
   buildHook simpleUserHooks pkgDescr lbi hooks flags
