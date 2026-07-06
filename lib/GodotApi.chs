@@ -1,7 +1,8 @@
 {# context prefix = "GDExtension" #}
-#include "gdextension_interface.h"
 
 module GodotApi where
+
+#include "gdextension_interface.h"
 
 --
 -- All Enums
