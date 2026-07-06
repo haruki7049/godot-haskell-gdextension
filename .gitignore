@@ -26,3 +26,6 @@ lhr-*/
 
 # emacs TAG file
 TAGS
+
+# nix-direnv
+.direnv/
