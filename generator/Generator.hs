@@ -3,7 +3,7 @@
 {-# LANGUAGE PatternGuards #-}
 {-# LANGUAGE RecordWildCards #-}
 
-import qualified Data.Text.Lazy as T
+import Data.Text.Lazy qualified as T
 import Language.C
 import Language.C.Data.Ident
 import Language.C.System.GCC

@@ -2,13 +2,13 @@
 
 Goals:
 
-* minimal
-  * no lense!
-  * simple data types
-* No TH
-  * important for wasm build
-* Connect to remote godot instance (optional)
-  * allows for hot reloading
+- minimal
+  - no lense!
+  - simple data types
+- No TH
+  - important for wasm build
+- Connect to remote godot instance (optional)
+  - allows for hot reloading
 
 ## Build / Run
 
@@ -50,5 +50,3 @@ godot --dump-extension-api --dump-gdextension-interface
 # Then we must manually update the src/GodotApi.chs file to match that of gdextension_interface.h
 # ...  More to come :-)
 ```
-
-
