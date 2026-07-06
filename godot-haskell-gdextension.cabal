@@ -18,4 +18,5 @@ library
   hs-source-dirs: lib
   exposed-modules: GodotApi
   build-depends: base
+  build-tools-depends: c2hs:c2hs
   default-language: GHC2021
