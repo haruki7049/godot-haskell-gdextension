@@ -23,9 +23,6 @@ library
   includes:
     gdextension_interface.h
 
-  build-tool-depends:
-    c2hs:c2hs
-
   hs-source-dirs:
     src
 
