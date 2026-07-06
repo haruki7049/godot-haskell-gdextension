@@ -1,0 +1,13 @@
+[configuration]
+
+entry_symbol = "godot_ext_init"
+compatibility_minimum = "4.1"
+
+[libraries]
+
+linux.debug.x86_64 = "res://out/libgdext-example.so"
+linux.release.x86_64 = "res://out/libgdext-example.so"
+linux.debug.arm64 = "res://out/libgdext-example.so"
+linux.release.arm64 = "res://out/libgdext-example.so"
+linux.debug.rv64 = "res://out/libgdext-example.so"
+linux.release.rv64 = "res://out/libgdext-example.so"

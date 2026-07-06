@@ -7,14 +7,16 @@ custom-setup
   setup-depends:
     Cabal,
     base,
-    shelly,
+    directory,
+    filepath,
 
 common warnings
-  ghc-options: -Wall
+  ghc-options: -Wall -threaded
 
 foreign-library gdext-example
   import: warnings
   type: native-shared
+  c-sources: cbits/flib.c
   hs-source-dirs: lib
   other-modules: FLib
   build-depends:
