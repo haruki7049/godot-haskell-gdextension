@@ -1,64 +1,31 @@
-{# context prefix = "GDExtension" #}
+{-# LANGUAGE ForeignFunctionInterface #-}
 
 module GodotApi where
 
-#include "gdextension_interface.h"
+import Foreign
+import Foreign.C
 
-import Foreign.C.String (CString)
-import Foreign.C.Types (CUChar)
+type GDExtensionInitializationLevel = CInt
+type GDExtensionInitializeCallback = Ptr () -> GDExtensionInitializationLevel -> IO ()
+type GDExtensionDeinitializeCallback = Ptr () -> GDExtensionInitializationLevel -> IO ()
 
---
--- All Enums
---
+foreign import ccall "wrapper"
+    mkInitializeCallback :: GDExtensionInitializeCallback -> IO (FunPtr GDExtensionInitializeCallback)
 
-{# enum VariantType {} #}
+foreign import ccall "wrapper"
+    mkDeinitializeCallback :: GDExtensionDeinitializeCallback -> IO (FunPtr GDExtensionDeinitializeCallback)
 
-{# enum VariantOperator {} #}
+-- Setup GDExtensionInitialization struct
+setupInitialization :: Ptr () -> GDExtensionInitializeCallback -> GDExtensionDeinitializeCallback -> IO ()
+setupInitialization initializationPtr initCb deinitCb = do
+    initFunPtr <- mkInitializeCallback initCb
+    deinitFunPtr <- mkDeinitializeCallback deinitCb
 
-{# enum CallErrorType {} #}
-
-{# enum ClassMethodFlags {} #} -- TODO this is a bit field!
-
-{# enum ClassMethodArgumentMetadata {} #}
-
-{# enum InitializationLevel {} #}
-
---
--- All Structs
---
-
-data GodotVersion = GodotVersion {
-  major :: Int,
-  minor :: Int,
-  patch :: Int,
-  string :: String
-}
-
---
--- All pointers
---
-
-{# pointer GDExtensionInterfaceFunctionPtr as FunPtr #}
-
---
--- All Function pointer types
---
-
-{# pointer GDExtensionInterfaceGetProcAddress as GetProcAddressFunPtr #}
-{# pointer GDExtensionClassLibraryPtr as ClassLibraryPtr #}
-{# pointer *InitializationFunction as InitializationPtr -> FunPtr #}
-
-foreign import ccall "dynamic"
-  callGetProcAddress :: GetProcAddressFunPtr -> (CString -> IO (FunPtr))
-
-foreign export ccall "my_extension_init"
-  myExtensionInit
-    :: GetProcAddressFunPtr
-    -> ClassLibraryPtr
-    -> InitializationPtr
-    -> IO CUChar
-
-myExtensionInit :: GetProcAddressFunPtr -> ClassLibraryPtr -> InitializationPtr -> IO CUChar
-myExtensionInit getProcAddress library initialization = do
-  -- initialize your extension here
-  return 1
+    -- offset 0: minimum_initialization_level (3 = Scene)
+    pokeByteOff initializationPtr 0 (3 :: CInt)
+    -- offset 8: userdata
+    pokeByteOff initializationPtr 8 nullPtr
+    -- offset 16: initialize
+    pokeByteOff initializationPtr 16 initFunPtr
+    -- offset 24: deinitialize
+    pokeByteOff initializationPtr 24 deinitFunPtr
