@@ -36,7 +36,9 @@
             pkgs.godot_4 # Godot runtime
           ];
 
-          buildInputs = [ ];
+          buildInputs = [
+            pkgs.haskellPackages.c2hs # c2hs for .chs
+          ];
         in
         {
           treefmt = {
